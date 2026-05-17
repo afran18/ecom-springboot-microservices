@@ -1,5 +1,8 @@
-package com.app.ecom;
+package com.app.ecom.controller;
 
+import com.app.ecom.dto.UserRequestDto;
+import com.app.ecom.dto.UserResponseDto;
+import com.app.ecom.service.UserService;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
@@ -18,12 +21,12 @@ public class UserController {
     }
 
     @GetMapping
-    public ResponseEntity<List<User>> getAllUsers() {
+    public ResponseEntity<List<UserResponseDto>> getAllUsers() {
         return new ResponseEntity<>(userService.fetchAllUsers(), HttpStatus.OK);
     }
     @GetMapping("/{id}")
-    public ResponseEntity<User> getUserById(@PathVariable Long id) {
-        Optional<User> user = userService.fetchUserById(id);
+    public ResponseEntity<UserResponseDto> getUserById(@PathVariable Long id) {
+//        Optional<User> user = userService.fetchUserById(id);
 //        if(user == null) {
 //            return ResponseEntity.notFound().build();
 //        }
@@ -35,14 +38,14 @@ public class UserController {
     }
 
     @PostMapping
-    public ResponseEntity<User> createUser(@RequestBody User user) {
-        User savedUser = userService.addUser(user);
+    public ResponseEntity<UserResponseDto> createUser(@RequestBody UserRequestDto userRequest) {
+        UserResponseDto savedUser = userService.addUser(userRequest);
         return ResponseEntity.status(HttpStatus.CREATED).body(savedUser);
     }
 
     @PutMapping("{id}")
-    public ResponseEntity<String> updateUser(@RequestBody User user, @PathVariable Long id) {
-        boolean updated = userService.updateUser(id, user);
+    public ResponseEntity<String> updateUser(@RequestBody UserRequestDto userRequest, @PathVariable Long id) {
+        boolean updated = userService.updateUser(id, userRequest);
 
         if(updated) {
             return ResponseEntity.ok("User updated successfully");
